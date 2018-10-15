@@ -19,12 +19,15 @@ if (!MONGO_URI || !CSV_FILE || !MODEL_NAME) {
 
 const start = +new Date()
 
-const Model = mongoose.model(MODEL_NAME, new mongoose.Schema({
+var schema = new mongoose.Schema({
   _id: {
     type: String,
     default: () => `${MODEL_NAME.substring(0, 3).toLowerCase()}-${shortid()}`
   }
-}, { strict: false }))
+}, { strict: false });
+schema.index({text: 'text'});
+
+const Model = mongoose.model(MODEL_NAME, schema)
 
 log({ MONGO_URI, CSV_FILE })
 
